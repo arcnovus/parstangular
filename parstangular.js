@@ -17,8 +17,8 @@ parseConfig.APP_ID = 'YOUR-APP-ID-GOES-HERE';
 parseConfig.API_KEY = 'YOUR-REST-API-KEY-GOES-HERE';
 parseConfig.BASE_URL = 'https://api.parse.com/1/';
 
-/** The ParseService is the main module that houses our Parstangular goodness **/
-var ParseApiModule = angular.module("ParseApi", ['restangular']);
+/** The Parstangular module is the main module that houses our Parstangular goodness **/
+var ParseApiModule = angular.module("Parstangular", ['restangular']);
 
 /** Throw our Parse configuration object into the mix  **/
 ParseApiModule.constant("PARSE_CONFIG", parseConfig);
@@ -40,7 +40,7 @@ ParseApiModule.config(function (RestangularProvider) {
 });
 
 /** A factory that returns Parsified version of Restangular **/
-ParseApiModule.factory('Parstangular', ['Restangular', 'PARSE_CONFIG',
+ParseApiModule.factory('ParseService', ['Restangular', 'PARSE_CONFIG',
 
     function (Restangular, parseConfig) {
 
