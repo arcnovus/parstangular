@@ -2,7 +2,7 @@
     "name": "parstangular",
     "version": "0.0.1",
     "authors": [
-    "onearc <appdev@onearc.com>"
+    "Arcnovus <appdev@onearc.com>"
   ],
     "description": "A Restangular wrapper for the Parse.com REST API.",
     "main": "parstangular.js",
@@ -22,7 +22,7 @@
     "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
+    "components",
     "test",
     "tests"
   ],

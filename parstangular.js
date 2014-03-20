@@ -7,11 +7,11 @@
  */
 
 /** 
-* This is an object in which to place your Parse.com configuration settings. 
-* Make sure to put your Parse App Id and Rest Api Key below. 
-* You can probably leave the BASE_URL property as is, unless Parse 
-* has introduced a new version of their API that you intend to use.
-*/
+ * This is an object in which to place your Parse.com configuration settings.
+ * Make sure to put your Parse App Id and Rest Api Key below.
+ * You can probably leave the BASE_URL property as is, unless Parse
+ * has introduced a new version of their API that you intend to use.
+ */
 var parseConfig = {};
 parseConfig.APP_ID = 'YOUR-APP-ID-GOES-HERE';
 parseConfig.API_KEY = 'YOUR-REST-API-KEY-GOES-HERE';
@@ -22,7 +22,7 @@ var ParseApiModule = angular.module("Parstangular", ['restangular']);
 
 /** Throw our Parse configuration object into the mix  **/
 ParseApiModule.constant("PARSE_CONFIG", parseConfig);
- 
+
 /** Configure the RestangularProvider **/
 ParseApiModule.config(function (RestangularProvider) {
 
@@ -31,7 +31,7 @@ ParseApiModule.config(function (RestangularProvider) {
         // This is a get for a list
         var newResponse;
         if (operation === "getList") {
-            // Here we're returning an Array which has one special property 'results' with our extra information
+            // Parse always wraps the results in an array called 'results' so here's where we tell Restangular about that
             newResponse = response.results;
         }
         return newResponse;
@@ -39,12 +39,12 @@ ParseApiModule.config(function (RestangularProvider) {
 
 });
 
-/** A factory that returns Parsified version of Restangular **/
+/** A factory that returns a Parsified version of Restangular **/
 ParseApiModule.factory('ParseService', ['Restangular', 'PARSE_CONFIG',
 
     function (Restangular, parseConfig) {
-
-        var newApi = Restangular.withConfig(function (RestangularConfigurer) {
+        /** An instance of Restangular that has been configured to work with Parse **/
+        var ParseApi = Restangular.withConfig(function (RestangularConfigurer) {
             RestangularConfigurer.setBaseUrl(parseConfig.BASE_URL);
             RestangularConfigurer.setDefaultHeaders({
                 'X-Parse-Application-Id': parseConfig.APP_ID,
@@ -58,12 +58,40 @@ ParseApiModule.factory('ParseService', ['Restangular', 'PARSE_CONFIG',
 
         });
 
-        /** A helper function to reference Parse classes **/
-        newApi.Class = function (objName) {
+        /** A helper function to reference the Rest path to your Parse objects **/
+        ParseApi.Class = function (objName) {
             return this.all('classes').all(objName);
         };
 
+        /** A helper function to reference the Parse users path **/
+        ParseApi.User = function () {
+            return this.all('users');
+        };
 
+        /** A helper function to get the currently logged in Parse User **/
+        ParseApi.getCurrentUser = function () {
+            return this.User.one('me').get();
+        };
 
-        return newApi;
+        /** A helper function Parse Login **/
+        ParseApi.login = function (username, password) {
+            var credentials = {
+                "username": username,
+                "password": password
+            };
+            return this.one('login').get(credentials);
+        };
+
+        ParseApi.signUp = function (userObj) {
+            return this.User.post(userObj);
+        };
+
+        ParseApi.requestPasswordReset = function (email) {
+            var emailObj = {
+                "email": email
+            };
+            return this.one('requestPasswordReset').post(emailObj);
+        };
+
+        return ParseApi;
     }]);
