@@ -1,3 +1,6 @@
+# WARNING!
+*THIS IS VERY MUCH A WORK IN PROGRESS. IT'S NOWHERE NEAR STABLE. USE AT YOUR OWN RISK
+
 # Parstangular
 A simple [Restangular](https://github.com/mgonto/restangular) wrapper for the [Parse REST API](https://www.parse.com/docs/rest).
 
