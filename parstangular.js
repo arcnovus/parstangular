@@ -1,6 +1,6 @@
 var parseConfig = {};
-parseConfig.appId = '5Md6MIrUHZl05WPqUaBOiIrWaD7HUtCRSdpR1CoU';
-parseConfig.apiKey = 'u5hZVTcAKnjef8lxrD9pfoIJWtBuV3u4RPa3O4n8';
+parseConfig.appId = '<<YOUR-APP-ID>>';
+parseConfig.apiKey = '<<YOUR-REST-API-KEY';
 parseConfig.baseUrl = 'https://api.parse.com/1/';
 
 var parstangularModule = angular.module("parstangular", ['restangular']);
