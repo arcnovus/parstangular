@@ -1,9 +1,24 @@
+/**
+ * @license Parstangular v0.1.0
+ * (c) 2014 Arcnovus, Inc. http://parstangular.com
+ * License: MIT
+ *
+ * Parstangular is a simple Restangular wrapper for the Parse.com REST API.
+ */
+
+/** 
+* This is an object in which to place your Parse.com configuration settings. 
+* Make sure to put your Parse App Id and Rest Api Key below. 
+* You can probably leave the baseUrl property as is, unless Parse 
+* has introduced a new version of their API that you intend to use.
+*/
 var parseConfig = {};
-parseConfig.appId = '<<YOUR-APP-ID>>';
-parseConfig.apiKey = '<<YOUR-REST-API-KEY>>';
+parseConfig.appId = 'YOUR-APP-ID-GOES-HERE';
+parseConfig.apiKey = 'YOUR-REST-API-KEY-GOES-HERE';
 parseConfig.baseUrl = 'https://api.parse.com/1/';
 
-var parstangularModule = angular.module("parstangular", ['restangular']);
+
+var parstangularModule = angular.module("ParseService", ['restangular']);
 
 parstangularModule.constant("parseConfig", parseConfig);
 
@@ -19,13 +34,14 @@ parstangularModule.config(function (RestangularProvider) {
         }
         return newResponse;
     });
+
 });
 
-parseApiFactory = parstangularModule.factory('parseApi', ['Restangular', 'parseConfig',
+var parseApiFactory = parstangularModule.factory('parseApi', ['Restangular', 'parseConfig',
 
     function (Restangular, parseConfig) {
 
-        return Restangular.withConfig(function (RestangularConfigurer) {
+        var newApi = Restangular.withConfig(function (RestangularConfigurer) {
             RestangularConfigurer.setBaseUrl(parseConfig.baseUrl);
             RestangularConfigurer.setDefaultHeaders({
                 'X-Parse-Application-Id': parseConfig.appId,
@@ -38,9 +54,21 @@ parseApiFactory = parstangularModule.factory('parseApi', ['Restangular', 'parseC
             });
 
         });
+
+        //        newApi.prototype.parseObject = function (objName) {
+        //
+        //            return this.all("classes").all(objName);
+        //        };
+        newApi.Class = function (objName) {
+            return this.all('classes').all(objName);
+        };
+
+//alert(newApi.restangularizeCollection);
+
+        return newApi;
     }]);
 
-parseClassFactory = parstangularModule.factory('parseClasses', ['parseApi',
+var parseClassFactory = parstangularModule.factory('parseClasses', ['parseApi',
 
     function (parseApi) {
 
